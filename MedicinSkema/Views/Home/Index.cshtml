@@ -1,0 +1,121 @@
+﻿@model List<Ical.Net.CalendarComponents.CalendarEvent>
+@using MedicinSkema.Controllers;
+@using Ical.Net.DataTypes;
+@using System.Globalization;
+
+<h2>Medicin</h2>
+@if (ViewBag.Semester != null && ViewBag.Hold != null)
+{
+        if (ViewBag.Semester == 1 && ViewBag.Hold == 3)
+        {
+            <div class="pull-right" id="closeImage">   
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img src="~/Content/13.jpg" style="display:block; height:200px;" class="img-responsive img-rounded" />                
+            </div>
+        }
+        <p class="lead">@ViewBag.Semester. semester, hold @ViewBag.Hold</p>
+}
+else
+{
+    for (int i = 1; i <= 5; i++)
+    {
+        for (int j = 1; j <= 8; j++)
+        {
+            <a class="btn btn-primary" href="~/@i/@j" role="button">@i. semester, hold @j</a>
+        }
+    }
+}
+
+@if (ViewBag.Semester != null && ViewBag.Hold != null)
+{
+    <div class="clearfix"></div>
+    <hr />
+    @*<div class="row">
+        <div class="col-md-9">
+            <div id="calendar"></div>
+        </div>
+        <div class="col-md-3">
+            <img src="https://lh4.ggpht.com/1Rw1DEbRB87sJ3sdx1g8yMrmx-Lt-VgYqhYolXv_y0hAZxbqoA1HAw1qT-JLk68-dHEL-QHmAA=w300" />
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-md-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+}
+
+@section header {
+    <link rel='stylesheet' href='~/Content/fullcalendar.css' />
+    <script src='~/Content/lib/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src='~/Content/lib/moment.min.js'></script>
+    <script src="~/Content/fullcalendar.js"></script>
+    <script src="~/Content/da.js"></script>  
+<script>
+    $(document).ready(function () {
+        $('#calendar').fullCalendar({
+            aspectRatio: 1,
+            contentHeight: 'auto',
+            weekends: false,
+            defaultView: "agendaWeek",
+            timeFormat: 'H(:mm)',
+            columnFormat: "dddd",
+            buttonText: { today: "I dag" },
+            allDaySlot: false,
+            minTime: "08:00:00",
+            maxTime: "18:00:00",
+            slotDuration: "00:15:00",
+            slotLabelInterval: "00:60:00",
+            events: [
+            @if(Model != null) {
+                foreach (var e in Model)
+                {
+                    <text>{</text>
+                    <text>title: "@Html.Raw(@HomeController.correctTitle(e.Summary))",</text>
+                    // Summertime
+                    @*<text>start: "@HomeController.correctTime(e.DtStart.AddHours(1))",</text>
+                    <text>end: "@HomeController.correctTime(e.DtEnd.AddHours(1))",</text>*@
+                    <text>start: "@HomeController.correctTime(e.DtStart.AsSystemLocal)",</text>
+                    <text>end: "@HomeController.correctTime(e.DtEnd.AsSystemLocal)",</text>
+                    <text>location: "@e.Location",</text>
+                    <text>description: "@Html.Raw(e.Summary)",</text>
+                    <text>color: "@HomeController.correctColor(@e.Summary)",</text>
+                    <text>allDay: false</text>
+                    <text>},</text>
+                }
+            }
+                {
+                    title: "",
+                    start: "2000-01-01T01:00:00",
+                    end: "2000-01-01T02:00:00",
+                    allDay: false
+                },
+            ],
+            eventRender: function (event, element) {
+                var building = event.location.split("-");
+                element.find('.fc-title').append("<span class='extraInfo'><br/> Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small></span>");
+                $(element).popover({ html: true, content: "Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small>", container: 'body', trigger: 'hover', placement: 'auto top', delay: { "hide": 50 } });
+            }
+        });
+    });
+</script>   
+}
+
+@section scripts {
+    <script>
+        var cookie = $.cookie('viewImage');
+        if (cookie == 'no') {
+            $("#closeImage").hide();
+            $(".close").hide();
+        }
+
+        $(".close").click(function () {
+            $("#closeImage").fadeOut();
+            $(".close").fadeOut();
+            $.cookie('viewImage', 'no', { expires: 7 });
+        });
+    </script>    
+}

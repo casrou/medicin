@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -180,54 +181,55 @@ namespace MedicinSkema.Controllers
             //}
 
             var path = Server.MapPath("~/skema/");
-            getICS(path);
+            IList<Team> teams = getTeams();
+
+            RestClient client = new RestClient("https://webuntis.dk");
+
+            foreach (Team t in teams.Where(t => t.name == "MED_BA_1.sem.H3"))
+            {
+                updateICS(path, t, client);
+            }
             return View();
         }
 
-        public static void getICS(string path)
+        public static void updateICS(string path, Team team, RestClient client)
         {
-            IList<Team> teams = getTeams();
+            RestRequest req = new RestRequest("WebUntis/Ical.do");
+            req.Method = Method.GET;
+            req.AddParameter("elemType", 1);
+            req.AddCookie("schoolname", "_YXVfaGVhbHRo");
+            req.AddOrUpdateParameter("elemId", team.id);
+
             var date = DateTime.Now.Date;
 
-            RestClient client = new RestClient("https://webuntis.dk");            
-
-            RestRequest req1 = new RestRequest("WebUntis/Ical.do");
-            req1.Method = Method.GET;
-            req1.AddParameter("elemType", 1);
-            req1.AddCookie("schoolname", "_YXVfaGVhbHRo");
-            
-            foreach(Team t in teams.ToList().GetRange(8,10))
-            {                
-                //string content = "";
-                StreamWriter sw = new StreamWriter(path + t.name + ".ics", false);
-
+            using (StreamWriter sw = new StreamWriter(path + team.name + ".ics", false))
+            {
                 sw.WriteLine("BEGIN:VCALENDAR");
-                sw.WriteLine("PRODID:-//Casper Roursgaard Christensen//DK");
-                sw.WriteLine("VERSION: 1.0");
+                sw.WriteLine("VERSION: 2.0");
                 sw.WriteLine("CALSCALE: GREGORIAN");
-                sw.WriteLine("X-WR-CALNAME:" + t.name);
 
-                req1.AddOrUpdateParameter("elemId", t.id);
                 for (int i = 0; i < 30; i++)
-                {                    
-                    req1.AddOrUpdateParameter("rpt_sd", date.ToString("yyyy-MM-dd"));     
-                    var res = client.Execute(req1);
+                {
+                    req.AddOrUpdateParameter("rpt_sd", date.ToString("yyyy-MM-dd"));
+                    var res = client.Execute(req);
                     var content = res.Content;
-                    content = content.Replace("BEGIN:VCALENDAR", String.Empty)
-                    .Replace("PRODID:-//Ben Fortuna//iCal4j 1.0//EN", String.Empty)
-                    .Replace("VERSION:2.0", String.Empty)
-                    .Replace("CALSCALE:GREGORIAN", String.Empty)
-                    .Replace("END:VCALENDAR", String.Empty);
+                    string toBeSearched = "CALSCALE:GREGORIAN";
+                    string toBeSearched2 = "END:VCALENDAR";
+                    content = content.Substring(content.IndexOf(toBeSearched) + toBeSearched.Length + 2);
+                    content = content.Substring(0, content.IndexOf(toBeSearched2) - 2);
+                    //content = content.Replace("BEGIN:VCALENDAR", String.Empty)
+                    //.Replace("PRODID:-//Ben Fortuna//iCal4j 1.0//EN", String.Empty)
+                    //.Replace("VERSION:2.0", String.Empty)
+                    //.Replace("CALSCALE:GREGORIAN", String.Empty)
+                    //.Replace("END:VCALENDAR", String.Empty)
+                    //.Replace("\n\n", "\n");
+                    //content = Regex.Replace(content, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
                     sw.WriteLine(content);
-                    //content += res.Content;
                     date.AddDays(7);
                 }
-                
+
                 sw.WriteLine("END:VCALENDAR");
-
-                //System.IO.File.WriteAllText(path + t.name + ".ics", content);
             }
-
             //string headervalue = res.Headers[6].Value.ToString();
             //var i1 = headervalue.IndexOf('"');
             //var i2 = headervalue.LastIndexOf('"') - i1;

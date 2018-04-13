@@ -22,8 +22,7 @@ namespace MedicinSkema.Controllers
         {            
             if(s != null & h != null)
             {
-                // months
-                int m = 1;
+                int m = 1; // months
 
                 ViewBag.Semester = s;
                 ViewBag.Hold = h;
@@ -38,7 +37,7 @@ namespace MedicinSkema.Controllers
                         }
                     }
                 }
-                //FileStream fs = new FileStream(@"C:\Users\caspe\OneDrive - Aarhus universitet\Projekter\MedicinSkema\MedicinSkema\H01semHold3.ics", FileMode.Open, FileAccess.Read);
+                //FileStream fs = new FileStream(@"C:\dev\medicin\MedicinSkema\H01semHold3.ics", FileMode.Open, FileAccess.Read);
                 //StreamReader sr = new StreamReader(fs);
                 //string ical = sr.ReadToEnd();
                 //sr.Close();
@@ -68,73 +67,59 @@ namespace MedicinSkema.Controllers
 
         public static string correctTitle(string title)
         {
-            string temp = "";
-            if (title.ToLower().Contains("studies"))
+            var temp = title.Substring(title.LastIndexOf('.') + 1).Trim().Split('_');
+            string result = "";
+            Dictionary<string, string> names = new Dictionary<string, string>();
+            // 1. semester
+            names.Add("GENETIK", "Medicinsk genetik");
+            names.Add("MIKRO", "Mikroskopisk anatomi");
+            names.Add("STUDIESTART", "Studiestart og introduktion");
+            names.Add("FILOSOFI", "Medicinsk filosofi og videnskabsteori");
+            // 2. semester
+            names.Add("MAKRO", "Makroskopisk anatomi");
+            //names.Add("NEURO", "???");
+            // 3. semester
+            names.Add("BIOKEMI", "Medicinsk Biokemi");
+
+            if (names.ContainsKey(temp[0]))
             {
-                temp = "Studiestart og introduktion";
-            } else if (title.ToLower().Contains("filoso"))
+                result = names[temp[0]];
+                if (temp.Length > 1)
+                {
+                    switch (temp[1].ToUpper().First())
+                    {
+                        case 'F':
+                            result = result + " - Forelæsning";
+                            break;
+                        case 'H':
+                            result = result + " - Holdtime";
+                            break;
+                    }
+                }
+            } else
             {
-                temp = "Medicinsk filosofi og videnskabsteori";
-            }
-            else if (title.ToLower().Contains("mikro"))
-            {
-                temp = "Mikroskopisk anatomi";
-            }
-            else if (title.ToLower().Contains("geneti"))
-            {
-                temp = "Medicinsk genetik";
-            }
-            else
-            {
-                temp = title;
+                result = title;
             }
 
-            if (title.ToLower().Contains("_ho"))
-            {
-                temp = temp + " - Holdtime";
-            }
-
-            if (title.ToLower().Contains("_f"))
-            {
-                temp = temp + " - Forelæsning";
-            }
-            return temp;
+            return result;
         }
 
         public static string correctColor(string title)
         {
-            string temp = "";
-            if (title.ToLower().Contains("studies"))
-            {
-                temp = "#5BC0EB";
-            }
-            else if (title.ToLower().Contains("filoso"))
-            {
-                temp = "#FDE74C";
-            }
-            else if (title.ToLower().Contains("mikro"))
-            {
-                temp = "#9BC53D";
-            }
-            else if (title.ToLower().Contains("geneti"))
-            {
-                temp = "#FA7921";
-            }
-            else
-            {
-                temp = title;
-            }
+            var temp = title.Substring(title.LastIndexOf('.') + 1).Trim();
+            Dictionary<string, string> colors = new Dictionary<string, string>();
+            colors.Add("GENETIK_HOL", "#F7D6E0");
+            colors.Add("GENETIK_FL", "#F2B5D4");
+            colors.Add("MIKRO_HOLD", "#B2F7EF");
+            colors.Add("STUDIESTART", "#7BDFF2");
 
-            if (title.ToLower().Contains("_ho"))
+            if (colors.ContainsKey(temp))
             {
-                temp = temp + " - Holdtime";
-            }
-
-            if (title.ToLower().Contains("_f"))
+                return colors[temp];
+            } else
             {
-                temp = temp + " - Forelæsning";
+                return "#EFF7F6";
             }
-            return temp;
         }
 
         public static string[] correctLocation(string loc)
@@ -152,20 +137,6 @@ namespace MedicinSkema.Controllers
                 temp = "0" + temp;
             }
             return temp;
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
 
         public ActionResult Update()

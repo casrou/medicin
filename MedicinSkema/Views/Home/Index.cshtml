@@ -16,6 +16,23 @@
             </div>
         }
         <p class="lead">@ViewBag.Semester. semester, hold @ViewBag.Hold</p>
+        <div class="clearfix"></div>
+    <hr />
+    // Considering Google ads
+    @*<div class="row">
+        <div class="col-md-9">
+            <div id="calendar"></div>
+        </div>
+        <div class="col-md-3">
+            <img style="width:300px; height: 250px; margin-top: 47px;" src="https://lh6.ggpht.com/Ab63gyKVnGwbQaj0guyJ0caGj-VugefmMd3SyzpPOX2RgCDA1tzQTY36sGI65Guw5OXdas4f5w=w300" />
+            <img style="width:300px; height: 600px; margin-top: 20px;" src="https://lh4.ggpht.com/1Rw1DEbRB87sJ3sdx1g8yMrmx-Lt-VgYqhYolXv_y0hAZxbqoA1HAw1qT-JLk68-dHEL-QHmAA=w300" />
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-md-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
 }
 else
 {
@@ -30,21 +47,7 @@ else
 
 @if (ViewBag.Semester != null && ViewBag.Hold != null)
 {
-    <div class="clearfix"></div>
-    <hr />
-    @*<div class="row">
-        <div class="col-md-9">
-            <div id="calendar"></div>
-        </div>
-        <div class="col-md-3">
-            <img src="https://lh4.ggpht.com/1Rw1DEbRB87sJ3sdx1g8yMrmx-Lt-VgYqhYolXv_y0hAZxbqoA1HAw1qT-JLk68-dHEL-QHmAA=w300" />
-        </div>
-    </div>*@
-    <div class="row">
-        <div class="col-md-12">
-            <div id="calendar"></div>
-        </div>
-    </div>
+    
 }
 
 @section header {
@@ -100,6 +103,13 @@ else
                 $(element).popover({ html: true, content: "Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small>", container: 'body', trigger: 'hover', placement: 'auto top', delay: { "hide": 50 } });
             }
         });
+        // Change to following week when checking in weekends
+        var d = new Date();
+        var n = d.getDay();
+        if (n == 0 || n == 6) // 0 = sunday, 6 = saturday
+        {
+            $('#calendar').fullCalendar('next');
+        }        
     });
 </script>   
 }

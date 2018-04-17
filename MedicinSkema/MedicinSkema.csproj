@@ -175,6 +175,7 @@
     <Content Include="Content\da.js" />
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\fullcalendar.js" />
+    <Content Include="Content\GitHub-Mark-32px.png" />
     <Content Include="Content\lib\jquery-ui.min.js" />
     <Content Include="Content\lib\jquery.min.js" />
     <Content Include="Content\lib\moment.min.js" />

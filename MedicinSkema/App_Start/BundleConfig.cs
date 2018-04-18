@@ -25,7 +25,7 @@ namespace MedicinSkema
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site_1.css"));
+                      "~/Content/site_2.css"));
         }
     }
 }

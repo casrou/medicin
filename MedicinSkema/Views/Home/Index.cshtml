@@ -35,15 +35,9 @@ else
     }
 }
 
-@if (ViewBag.Semester != null && ViewBag.Hold != null)
-{
-    
-}
-
 @section header {
     <link rel='stylesheet' href='~/Content/fullcalendar.css' />
-    <script src='~/Content/lib/jquery.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="~/Content/js.cookie.js"></script>
     <script src='~/Content/lib/moment.min.js'></script>
     <script src="~/Content/fullcalendar.js"></script>
     <script src="~/Content/da.js"></script>  
@@ -68,9 +62,6 @@ else
                 {
                     <text>{</text>
                     <text>title: "@Html.Raw(@HomeController.correctTitle(e.Summary))",</text>
-                    // Summertime
-                    @*<text>start: "@HomeController.correctTime(e.DtStart.AddHours(1))",</text>
-                    <text>end: "@HomeController.correctTime(e.DtEnd.AddHours(1))",</text>*@
                     <text>start: "@HomeController.correctTime(e.DtStart.AsSystemLocal)",</text>
                     <text>end: "@HomeController.correctTime(e.DtEnd.AsSystemLocal)",</text>
                     <text>location: "@e.Location",</text>
@@ -106,7 +97,7 @@ else
 
 @section scripts {
     <script>
-        var cookie = $.cookie('viewImage');
+        var cookie = Cookies.get('showImage');
         if (cookie == 'no') {
             $("#closeImage").hide();
             $(".close").hide();
@@ -115,7 +106,7 @@ else
         $(".close").click(function () {
             $("#closeImage").fadeOut();
             $(".close").fadeOut();
-            $.cookie('viewImage', 'no', { expires: 7 });
+            Cookies.set('showImage', 'no', { expires: 7 })
         });
     </script>    
 }

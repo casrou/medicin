@@ -176,13 +176,14 @@
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\fullcalendar.js" />
     <Content Include="Content\GitHub-Mark-32px.png" />
+    <Content Include="Content\js.cookie.js" />
     <Content Include="Content\lib\jquery-ui.min.js" />
     <Content Include="Content\lib\jquery.min.js" />
     <Content Include="Content\lib\moment.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site_1.css" />
+    <Content Include="Content\Site_2.css" />
     <Content Include="H01semHold3.ics" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

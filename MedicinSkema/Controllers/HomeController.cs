@@ -37,10 +37,13 @@ namespace MedicinSkema.Controllers
                         }
                     }
                 }
-                //FileStream fs = new FileStream(@"C:\dev\medicin\MedicinSkema\H01semHold3.ics", FileMode.Open, FileAccess.Read);
-                //StreamReader sr = new StreamReader(fs);
-                //string ical = sr.ReadToEnd();
-                //sr.Close();
+                // For debugging purposes only
+                /*
+                FileStream fs = new FileStream(@"C:\dev\medicin\MedicinSkema\H01semHold3.ics", FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fs);
+                string ical = sr.ReadToEnd();
+                sr.Close();
+                */
                 var calendar = Calendar.Load(ical);
                 var events = calendar.GetOccurrences(DateTime.Now.AddDays(-5), DateTime.Now.AddMonths(m))
                     .Select(o => o.Source)
@@ -56,13 +59,24 @@ namespace MedicinSkema.Controllers
             }          
         }
 
-        public static string correctTime(/*Ical.Net.DataTypes.IDateTime*/ DateTime dateTime)
+        public static string correctTime(DateTime dateTime)
         {
-            string output = oneDigit(dateTime.Year) + "-" + oneDigit(dateTime.Month) + "-" + oneDigit(dateTime.Day) + "T" + oneDigit(dateTime.Hour) + ":" + oneDigit(dateTime.Minute) + ":" + oneDigit(dateTime.Second);
-            //string input = dateTime.ToString();
-            //string[] temp = input.Split(' ');
-            //string output = temp[0] + "T" + temp[1];
+            string output = oneDigit(dateTime.Year) 
+                + "-" + oneDigit(dateTime.Month) 
+                + "-" + oneDigit(dateTime.Day) 
+                + "T" + oneDigit(dateTime.Hour) 
+                + ":" + oneDigit(dateTime.Minute) 
+                + ":" + oneDigit(dateTime.Second);
             return output;                
+        }
+        public static string oneDigit(int s)
+        {
+            string temp = s.ToString();
+            if (temp.Count() == 1)
+            {
+                temp = "0" + temp;
+            }
+            return temp;
         }
 
         public static string correctTitle(string title)
@@ -129,15 +143,7 @@ namespace MedicinSkema.Controllers
             return result;
         }
 
-        public static string oneDigit(int s)
-        {
-            string temp = s.ToString();
-            if(temp.Count() == 1)
-            {
-                temp = "0" + temp;
-            }
-            return temp;
-        }
+        // ------------------------ WEBUNTIS PROGRESS ------------------------
 
         public ActionResult Update()
         {

@@ -33,6 +33,13 @@ else
             <a class="btn btn-primary" href="~/@i/@j" role="button">@i. semester, hold @j</a>
         }
     }
+
+    <br /><br />
+    <div>
+        <p id="desc">
+            Skema for bachelorstuderende på Medicin ved Aarhus Universitet. Skemaet viser de forskellige kurser (hold/forelæsninger) samt lokale. Vælg dit semester og hold ovenfor.
+        </p>
+    </div>
 }
 
 @section header {
@@ -103,10 +110,19 @@ else
             $(".close").hide();
         }
 
+        var cookie2 = Cookies.get('firstTime');
+        if (cookie2 == 'no') {
+            $("#desc").hide();
+        }
+
         $(".close").click(function () {
             $("#closeImage").fadeOut();
             $(".close").fadeOut();
             Cookies.set('showImage', 'no', { expires: 7 })
+        });
+
+        $(function () {
+            Cookies.set('firstTime', 'no', { expires: 183 })
         });
     </script>    
 }

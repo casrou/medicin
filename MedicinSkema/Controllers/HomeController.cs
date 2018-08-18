@@ -135,6 +135,8 @@ namespace MedicinSkema.Controllers
             {
                 var temp = title.Substring(title.LastIndexOf('.') + 1).Trim();
                 Dictionary<string, string> colors = new Dictionary<string, string>();
+
+                // 1. semester
                 colors.Add("GENETIK_HOL", "#F7D6E0");
                 colors.Add("GENETIK_FL", "#F2B5D4");
                 colors.Add("MIKRO_HOLD", "#B2F7EF");
@@ -143,14 +145,20 @@ namespace MedicinSkema.Controllers
                 colors.Add("STUDIESTAR", "#7BDFF2");
                 colors.Add("FILOSOFI_HO", "#FAB161");
                 colors.Add("FILOSOFI__F", "#FFB8D1");
-                colors.Add("BIOKEMI_HOL", "#8789C0");
-                colors.Add("BIOKEMI_FL", "#9CADCE");
-                colors.Add("MAKRO_FL", "#A06CD5");
-                colors.Add("MAKRO_HOLD", "#AFC97E");
-                colors.Add("MAKRO_DISS.", "#B0C4B1");
-                colors.Add("SUNDPSYK_FL", "#7F7CAF");
-                colors.Add("FYSIOLOGI_H", "#75DDDD");
-                colors.Add("FYSIOLOGI_F", "#C1BCAC");
+
+                // 2. semester
+                colors.Add("MAKRO_FL", "#7BDFF2");
+                colors.Add("MAKRO_HOLD", "#FFB8D1");
+                colors.Add("MAKRO_DISS.", "#B2F7EF");
+
+                // 3. semester
+                colors.Add("BIOKEMI_HOL", "#7BDFF2");
+                colors.Add("BIOKEMI_FL", "#FFB8D1");
+
+                // 4. semester
+                colors.Add("SUNDPSYK_FL", "#7BDFF2");
+                colors.Add("FYSIOLOGI_H", "#FFB8D1");
+                colors.Add("FYSIOLOGI_F", "#B2F7EF");
 
                 if (colors.ContainsKey(temp))
                 {

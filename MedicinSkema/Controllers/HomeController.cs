@@ -81,59 +81,91 @@ namespace MedicinSkema.Controllers
 
         public static string correctTitle(string title)
         {
-            var temp = title.Substring(title.LastIndexOf('.') + 1).Trim().Split('_');
-            string result = "";
-            Dictionary<string, string> names = new Dictionary<string, string>();
-            // 1. semester
-            names.Add("GENETIK", "Medicinsk genetik");
-            names.Add("MIKRO", "Mikroskopisk anatomi");
-            names.Add("STUDIESTART", "Studiestart og introduktion");
-            names.Add("FILOSOFI", "Medicinsk filosofi og videnskabsteori");
-            // 2. semester
-            names.Add("MAKRO", "Makroskopisk anatomi");
-            //names.Add("NEURO", "???");
-            // 3. semester
-            names.Add("BIOKEMI", "Medicinsk Biokemi");
-
-            if (names.ContainsKey(temp[0]))
+            try
             {
-                result = names[temp[0]];
-                if (temp.Length > 1)
+                var temp = title.Substring(title.LastIndexOf('.') + 1).Trim().Split('_');
+                string result = "";
+                Dictionary<string, string> names = new Dictionary<string, string>();
+                // 1. semester
+                names.Add("GENETIK", "Medicinsk genetik");
+                names.Add("MIKRO", "Mikroskopisk anatomi");
+                names.Add("STUDIESTAR", "Studiestart og introduktion");
+                names.Add("STUDIESTART", "Studiestart og introduktion");
+                names.Add("FILOSOFI", "Medicinsk filosofi og videnskabsteori");
+                // 2. semester
+                names.Add("MAKRO", "Makroskopisk anatomi");
+                // 3. semester
+                names.Add("BIOKEMI", "Medicinsk Biokemi");
+                // 4. semester
+                names.Add("SUNDPSYK", "Sundhedspsykologi");
+                names.Add("FYSIOLOGI", "Fysiologi");
+
+                if (names.ContainsKey(temp[0]))
                 {
-                    switch (temp[1].ToUpper().First())
+                    result = names[temp[0]];
+                    if (temp.Length > 1)
                     {
-                        case 'F':
-                            result = result + " - Forelæsning";
-                            break;
-                        case 'H':
-                            result = result + " - Holdtime";
-                            break;
+                        switch (temp.Last().ToUpper().First())
+                        {
+                            case 'F':
+                                result = result + " - Forelæsning";
+                                break;
+                            case 'H':
+                                result = result + " - Holdtime";
+                                break;
+                        }
                     }
                 }
-            } else
-            {
-                result = title;
-            }
+                else
+                {
+                    result = title;
+                }
 
-            return result;
+                return result;
+            }
+            catch (Exception)
+            {
+                return title;
+            }            
         }
 
         public static string correctColor(string title)
         {
-            var temp = title.Substring(title.LastIndexOf('.') + 1).Trim();
-            Dictionary<string, string> colors = new Dictionary<string, string>();
-            colors.Add("GENETIK_HOL", "#F7D6E0");
-            colors.Add("GENETIK_FL", "#F2B5D4");
-            colors.Add("MIKRO_HOLD", "#B2F7EF");
-            colors.Add("STUDIESTART", "#7BDFF2");
+            try
+            {
+                var temp = title.Substring(title.LastIndexOf('.') + 1).Trim();
+                Dictionary<string, string> colors = new Dictionary<string, string>();
+                colors.Add("GENETIK_HOL", "#F7D6E0");
+                colors.Add("GENETIK_FL", "#F2B5D4");
+                colors.Add("MIKRO_HOLD", "#B2F7EF");
+                colors.Add("MIKRO_FL", "#48BEFF");
+                colors.Add("STUDIESTART", "#7BDFF2");
+                colors.Add("STUDIESTAR", "#7BDFF2");
+                colors.Add("FILOSOFI_HO", "#FAB161");
+                colors.Add("FILOSOFI__F", "#FFB8D1");
+                colors.Add("BIOKEMI_HOL", "#8789C0");
+                colors.Add("BIOKEMI_FL", "#9CADCE");
+                colors.Add("MAKRO_FL", "#A06CD5");
+                colors.Add("MAKRO_HOLD", "#AFC97E");
+                colors.Add("MAKRO_DISS.", "#B0C4B1");
+                colors.Add("SUNDPSYK_FL", "#7F7CAF");
+                colors.Add("FYSIOLOGI_H", "#75DDDD");
+                colors.Add("FYSIOLOGI_F", "#C1BCAC");
 
-            if (colors.ContainsKey(temp))
-            {
-                return colors[temp];
-            } else
-            {
-                return "#EFF7F6";
+                if (colors.ContainsKey(temp))
+                {
+                    return colors[temp];
+                }
+                else
+                {
+                    return "#AEB4B3";
+                }
             }
+            catch (Exception)
+            {
+                return "#AEB4B3";
+            }
+            
         }
 
         public static string[] correctLocation(string loc)

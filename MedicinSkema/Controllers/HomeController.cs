@@ -83,7 +83,7 @@ namespace MedicinSkema.Controllers
         {
             try
             {
-                var temp = title.Substring(title.LastIndexOf('.') + 1).Trim().Split('_');
+                var temp = title.Substring(title.TrimEnd('.').LastIndexOf('.') + 1).Trim().Split('_');
                 string result = "";
                 Dictionary<string, string> names = new Dictionary<string, string>();
                 // 1. semester
@@ -94,6 +94,7 @@ namespace MedicinSkema.Controllers
                 names.Add("FILOSOFI", "Medicinsk filosofi og videnskabsteori");
                 // 2. semester
                 names.Add("MAKRO", "Makroskopisk anatomi");
+                names.Add("MAKRO_DISS", "Makroskopisk anatomi - Dissektion");
                 // 3. semester
                 names.Add("BIOKEMI", "Medicinsk Biokemi");
                 // 4. semester
@@ -113,6 +114,9 @@ namespace MedicinSkema.Controllers
                             case 'H':
                                 result = result + " - Holdtime";
                                 break;
+                            case 'D':
+                                result = result + " - Dissektion";
+                                break;
                         }
                     }
                 }
@@ -123,7 +127,7 @@ namespace MedicinSkema.Controllers
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return title;
             }            
@@ -133,7 +137,7 @@ namespace MedicinSkema.Controllers
         {
             try
             {
-                var temp = title.Substring(title.LastIndexOf('.') + 1).Trim();
+                var temp = title.Substring(title.TrimEnd('.').LastIndexOf('.') + 1).Trim();
                 Dictionary<string, string> colors = new Dictionary<string, string>();
 
                 // 1. semester

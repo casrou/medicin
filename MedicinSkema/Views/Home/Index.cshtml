@@ -60,7 +60,7 @@ else
             buttonText: { today: "I dag" },
             allDaySlot: false,
             minTime: "08:00:00",
-            maxTime: "18:00:00",
+            maxTime: "19:00:00",
             slotDuration: "00:15:00",
             slotLabelInterval: "00:60:00",
             events: [
@@ -71,6 +71,7 @@ else
                     <text>title: "@Html.Raw(@HomeController.correctTitle(e.Summary))",</text>
                     <text>start: "@HomeController.correctTime(e.DtStart.AsSystemLocal)",</text>
                     <text>end: "@HomeController.correctTime(e.DtEnd.AsSystemLocal)",</text>
+                    if (e.Location == null) { e.Location = "ukendt"; }
                     <text>location: "@e.Location",</text>
                     <text>description: "@Html.Raw(e.Summary)",</text>
                     <text>color: "@HomeController.correctColor(@e.Summary)",</text>
@@ -86,9 +87,14 @@ else
                 },
             ],
             eventRender: function (event, element) {
-                var building = event.location.split("-");
-                element.find('.fc-title').append("<span class='extraInfo'><br/> Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small></span>");
-                $(element).popover({ html: true, content: "Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small>", container: 'body', trigger: 'hover', placement: 'auto top', delay: { "hide": 50 } });
+                if (event.location != "ukendt") {
+                    var building = event.location.split("-");
+                    element.find('.fc-title').append("<span class='extraInfo'><br/> Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small></span>");
+                    $(element).popover({ html: true, content: "Bygning: <a href='http://www.au.dk/om/organisation/find-au/bygningskort/?b=" + building[0] + "'> " + building[0] + "</a >-" + building[1] + "<br /> <small>" + event.description + "</small>", container: 'body', trigger: 'hover', placement: 'auto top', delay: { "hide": 50 } });
+                } else {
+                    element.find('.fc-title').append("<span class='extraInfo'><br/><small>" + event.description + "</small></span>");
+                    $(element).popover({ html: true, content: "<br /> <small>" + event.description + "</small>", container: 'body', trigger: 'hover', placement: 'auto top', delay: { "hide": 50 } });
+                }
             }
         });
         // Change to following week when checking in weekends
